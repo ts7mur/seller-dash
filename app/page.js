@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
 
+export const dynamic = 'force-dynamic';
+
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -13,8 +15,6 @@ export default function Home() {
   useEffect(() => {
     async function check() {
       try {
-        // We ask Supabase for a table that doesn't exist yet.
-        // If it answers (even with "no such table"), the connection works.
         const { error } = await supabase.from("connection_test").select("*").limit(1);
         if (error && error.code === "42P01") {
           setStatus("Connected to Supabase ✓ (database is empty, that's expected)");
